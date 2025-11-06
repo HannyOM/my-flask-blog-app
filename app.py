@@ -57,13 +57,7 @@ def save(post_id):
             editing_post.post = new_post
             db.session.commit()
     return redirect(url_for("home"))
-    # get the post from the db
-    # if request method is post, 
-    # get the title
-    # get the post
-    # if title and post
-    # old content post == new post
-    # commit to db  
+
 
 if __name__ == "__main__":
     app.run(debug=True)
