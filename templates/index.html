@@ -4,15 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
 </head>
 
 <body>
-    <span>
-        <h4>Hello Person</h4>
-        <a href="{{url_for('new')}}">New Post</a>
-    </span>
+    <h4>Hello Person</h4>
+    <a href="{{url_for('new')}}">New Post</a>
 
+    <p>
+        {% for each_post in all_posts %}
+        <br>
+        {{ each_post.title }}
+        <br>
+        {{ each_post.post }}
+        <br>
+        {{ each_post.date }}
+        <br>
+        {% endfor %}
+    </p>
 </body>
 
 </html>
