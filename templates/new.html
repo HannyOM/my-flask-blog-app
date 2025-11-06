@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <form action="/add" method="post">
+    <form action="{{ url_for('add') }}" method="post">
         <label for="post_title">Title</label>
         <br>
         <input name="post_title" type="text">
@@ -17,8 +17,8 @@
         <br>
         <textarea name="post_content" id=""></textarea>
         <br>
-        <button>Add</button>
-        <button>Cancel</button>
+        <button type="submit">Add</button>
+        <a href="{{ url_for('home') }}">Cancel</a>
     </form>
 </body>
 

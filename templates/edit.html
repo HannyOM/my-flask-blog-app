@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>edit page</h1>
+    <form action="{{ url_for('save', post_id=editing_post.id) }}" method="post">
+        <label for="new_post_title">Title</label>
+        <br>
+        <input name="new_post_title" type="text" value="{{ editing_post.title }}">
+        <br>
+        <label for="new_post_content">Post</label>
+        <br>
+        <textarea name="new_post_content" id="">{{ editing_post.post }}</textarea>
+        <br>
+        <button type="submit">Save</button>
+        <a href="{{ url_for('home') }}">Cancel</a>
+    </form>
+</body>
+
+</html>
