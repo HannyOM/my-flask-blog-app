@@ -19,9 +19,9 @@ with app.app_context():
     db.create_all()
 
 @app.route("/")
-def index():
+def home():
     all_posts = Post.query.all()
-    return render_template("index.html", all_posts=all_posts)
+    return render_template("home.html", all_posts=all_posts)
 
 
 @app.route("/new")
@@ -29,15 +29,41 @@ def new():
     return render_template("new.html")
 
 
-@app.route("/add", methods=["GET", "POST"])
+@app.route("/add", methods=["POST"])
 def add():
     title = request.form.get("post_title")
     post = request.form.get("post_content")
     if title and post:
-        new_post = Post(title=title, post=post, date=datetime.utcnow())
+        new_post = Post(title=title, post=post, date=datetime.utcnow()) #type: ignore
         db.session.add(new_post)
         db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("home"))
+
+
+@app.route("/edit/<int:post_id>", methods=["GET", "POST"])
+def edit(post_id):
+    editing_post = Post.query.filter_by(id=post_id).first()
+    return render_template("edit.html", editing_post=editing_post)
+
+
+@app.route("/save/<int:post_id>", methods=["POST"])
+def save(post_id):
+    editing_post = Post.query.filter_by(id=post_id).first()
+    if request.method == "POST":
+        new_title = request.form.get("new_post_title")
+        new_post = request.form.get("new_post_content")
+        if new_title and new_post:
+            editing_post.title = new_title
+            editing_post.post = new_post
+            db.session.commit()
+    return redirect(url_for("home"))
+    # get the post from the db
+    # if request method is post, 
+    # get the title
+    # get the post
+    # if title and post
+    # old content post == new post
+    # commit to db  
 
 if __name__ == "__main__":
     app.run(debug=True)
