@@ -1,4 +1,4 @@
-# The functions of this "__init__.py" file are to contain the Application Factory and to tell Python to treat the Bloggr directory as a package. 
+# The functions of this "__init__.py" file are to contain the Application Factory and to tell Python to treat the "Bloggr" directory as a package. 
 
 # Below is an instance of the Flask class created within a function.
 # This function is known as the "Application Factory". 
@@ -8,12 +8,8 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
 
-class Base(DeclarativeBase):            # Creates a base class for declarative models.
-    pass
-
-db = SQLAlchemy(model_class = Base)         # Initializes SQLAlchemy without app.
+db = SQLAlchemy()         # Initializes SQLAlchemy without app.
 
 def create_app(test_config=None): 
     app = Flask(__name__,           # Tells the app the name of the current Python module where it is located.
@@ -35,6 +31,8 @@ def create_app(test_config=None):
         pass
 
     db.init_app(app)            # Initializes database with app.
+
+    from . import models            # Imports and registers models.
 
     with app.app_context():         # Creates database tables.
         db.create_all()
