@@ -7,13 +7,21 @@
 
 import os
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+
+class Base(DeclarativeBase):            # Creates a base class for declarative models.
+    pass
+
+db = SQLAlchemy(model_class = Base)         # Initializes SQLAlchemy without app.
 
 def create_app(test_config=None): 
     app = Flask(__name__,           # Tells the app the name of the current Python module where it is located.
                 instance_relative_config=True)          # Tells the app that the configuration files are relative to the instance folder. 
     app.config.from_mapping(            # Sets some default configurations.
         SECRET_KEY = "mydev",
-        DATABASE = os.path.join(app.instance_path, "bloggr.sqlite"),
+        SQLALCHEMY_DATABASE_URI = os.path.join("sqlite:///" + app.instance_path, "bloggr.sqlite"),
+        SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
 
     if test_config is None:
@@ -25,6 +33,11 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)          # Attempts to create an instance path if one doesn't already exist.
     except OSError:
         pass
+
+    db.init_app(app)            # Initializes database with app.
+
+    with app.app_context():         # Creates database tables.
+        db.create_all()
 
     @app.route("/hello")
     def hello():
