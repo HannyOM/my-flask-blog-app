@@ -8,6 +8,7 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 db = SQLAlchemy()         # Initializes SQLAlchemy without app.
 
@@ -32,10 +33,13 @@ def create_app(test_config=None):
 
     db.init_app(app)            # Initializes database with app.
 
-    from . import models            # Imports and registers models.
+    from . import models            # Imports database models.
 
     with app.app_context():         # Creates database tables.
         db.create_all()
+
+    from . import auth          # Imports auth blueprint.
+    app.register_blueprint(auth.auth_bp)            # Registers auth blueprint.
 
     @app.route("/hello")
     def hello():
