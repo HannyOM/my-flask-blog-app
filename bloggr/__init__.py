@@ -8,9 +8,13 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask_bcrypt import Bcrypt
+# from flask_login import LoginManager
 
 db = SQLAlchemy()         # Initializes SQLAlchemy without app.
+bcrypt = Bcrypt()           # Initializes Brcypt without app.
+# login_manager = LoginManager()          # Initializes Login Manager without app.
+
 
 def create_app(test_config=None): 
     app = Flask(__name__,           # Tells the app the name of the current Python module where it is located.
@@ -31,7 +35,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    db.init_app(app)            # Initializes database with app.
+    db.init_app(app)            # Initializes SQLAlchemy with app.
+    bcrypt.init_app(app)            # Initializes Brcypt with app.
+    # login_manager.init_app(app)         # Initializes Login Manager with app.        
 
     from . import models            # Imports database models.
 
