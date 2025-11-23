@@ -26,7 +26,10 @@
 
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <button class="ui blue button" type="submit">Login</button>
-                <p>Not registered? <a href="{{url_for('hello')}}">Register</a></p> <!--TO BE CHANGED-->
+                {% for message in get_flashed_messages() %}
+                <div class="flash grey label">{{ message }}</div>
+                {% endfor %}
+                <p>Not registered? <a href="{{url_for('hello')}}">Register</a></p> <!--TO BE UPDATED-->
             </div>
         </form>
     </div>
