@@ -9,11 +9,12 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-# from flask_login import LoginManager
+from flask_login import LoginManager
+
 
 db = SQLAlchemy()         # Initializes SQLAlchemy without app.
 bcrypt = Bcrypt()           # Initializes Brcypt without app.
-# login_manager = LoginManager()          # Initializes Login Manager without app.
+login_manager = LoginManager()          # Initializes Login Manager without app.
 
 
 def create_app(test_config=None): 
@@ -37,15 +38,20 @@ def create_app(test_config=None):
 
     db.init_app(app)            # Initializes SQLAlchemy with app.
     bcrypt.init_app(app)            # Initializes Brcypt with app.
-    # login_manager.init_app(app)         # Initializes Login Manager with app.        
-
-    from . import models            # Imports database models.
+    login_manager.init_app(app)         # Initializes Login Manager with app.        
+ 
+    from . import models          # Imports database models.
 
     with app.app_context():         # Creates database tables.
         db.create_all()
 
     from . import auth          # Imports auth blueprint.
     app.register_blueprint(auth.auth_bp)            # Registers auth blueprint.
+
+    from .models import User
+    @login_manager.user_loader          # Provides a user_loader callback, which reloads the user object from the user ID stored in the session.
+    def load_user(user_id):
+        return User.query.get(user_id)
 
     @app.route("/hello")
     def hello():
