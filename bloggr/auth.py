@@ -5,8 +5,7 @@ from flask_login import login_user, login_required, logout_user
 
 auth_bp = Blueprint("auth",         # Name of the blueprint.
                     __name__,           # Lets the blueprint know where it is defined.
-                    url_prefix="/auth",         # Prepends to all URLs associated to the blueprint.
-                    template_folder="templates")            # Tells the blueprint where its corresponding Jinja template is located.        
+                    url_prefix="/auth")         # Prepends to all URLs associated to the blueprint
 
 # REGISTER ROUTE
 @auth_bp.route("/register", methods=["GET", "POST"])
