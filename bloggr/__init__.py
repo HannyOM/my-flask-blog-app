@@ -16,8 +16,7 @@ db = SQLAlchemy()         # Initializes SQLAlchemy without app.
 bcrypt = Bcrypt()           # Initializes Brcypt without app.
 login_manager = LoginManager()          # Initializes Login Manager without app.
 
-
-def create_app(test_config=None): 
+def create_app(test_config=None):
     app = Flask(__name__,           # Tells the app the name of the current Python module where it is located.
                 instance_relative_config=True)          # Tells the app that the configuration files are relative to the instance folder. 
     app.config.from_mapping(            # Sets some default configurations.
@@ -58,10 +57,6 @@ def create_app(test_config=None):
         return "Hello Hanny"
     
     return app
-
-
-
-
 
 
 
