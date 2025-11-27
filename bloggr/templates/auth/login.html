@@ -30,7 +30,7 @@
                 {% for message in get_flashed_messages() %}
                 <div class="flash grey label">{{ message }}</div>
                 {% endfor %}
-                <p>Not registered? <a href="{{url_for('hello')}}">Register</a></p> <!--TO BE UPDATED-->
+                <p>Not registered? <a href="{{url_for('auth.register')}}">Register</a></p>
             </div>
         </form>
     </div>
