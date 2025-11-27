@@ -53,7 +53,7 @@ def login():
                 password_correct = bcrypt.check_password_hash(hashed_password, password)
                 if password_correct:
                     login_user(existing_user)
-                    return redirect(url_for('hello'))           # TO BE UPDATED
+                    return redirect(url_for('blog.index'))
                 else:
                     error = "Password is incorrect."
             else:
