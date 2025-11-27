@@ -1,48 +1,82 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Post
 from . import db
 from datetime import datetime
+from flask_login import login_required, current_user
 
 blog_bp = Blueprint('blog',         # Name of the blueprint.
                     __name__)           # Lets the blueprint know where it is defined.
 
+# INDEX ROUTE
 @blog_bp.route("/")
 def index():
     all_posts = Post.query.all()
-    return render_template("blog/index.html", all_posts=all_posts)
+    user = current_user.username
+    return render_template("blog/index.html", all_posts=all_posts, user=user)
 
+# NEW POST ROUTE
 @blog_bp.route("/new")
+@login_required
 def new():
     return render_template("blog/new.html")
 
+# ADD POST ROUTE
 @blog_bp.route("/add", methods=["POST"])
+@login_required
 def add():
-    title = request.form.get("post_title")
-    content = request.form.get("post_content")
-    if title and content:
-        new_content = Post(title=title, content=content, date=datetime.utcnow()) #type: ignore
-        db.session.add(new_content)
-        db.session.commit()
+    if request.method == "POST":            # Gets the user input.
+        title = request.form.get("post_title")
+        content = request.form.get("post_content")
+        error = None
+        
+        if not title:           # Ensures the user has inputted something.
+            error = "Title is required."
+        elif not content:
+            error = "Content is reqired."
+        
+        if error is not None:
+            error_msg = flash(error)
+            return redirect(url_for("blog.new", error_msg=error_msg))
+        else:
+            new_content = Post(title=title, content=content,author_id=current_user.id, date=datetime.utcnow()) #type: ignore            # Updates the database with the user's input.
+            db.session.add(new_content)
+            db.session.commit()
     return redirect(url_for("blog.index"))
 
+# EDIT POST ROUTE
 @blog_bp.route("/edit/<int:post_id>", methods=["GET", "POST"])
+@login_required
 def edit(post_id):
     editing_post = Post.query.filter_by(id=post_id).first()
     return render_template("blog/edit.html", editing_post=editing_post)
 
+# SAVE POST ROUTE
 @blog_bp.route("/save/<int:post_id>", methods=["POST"])
+@login_required
 def save(post_id):
     editing_post = Post.query.filter_by(id=post_id).first()
     if request.method == "POST":
         new_title = request.form.get("new_post_title")
-        new_post = request.form.get("new_post_content")
-        if new_title and new_post:
+        new_content = request.form.get("new_post_content")
+        error = None
+
+        if not new_title:
+            error = "Title is required."
+        elif not new_content:
+            error = "Content is required."
+
+        if error is not None:
+            error_msg = flash(error)
+            return redirect(url_for("blog.edit", post_id=editing_post.id, error_msg=error_msg)) # type: ignore
+        else:
             editing_post.title = new_title # type: ignore
-            editing_post.content = new_post # type: ignore
+            editing_post.content = new_content # type: ignore
             db.session.commit()
     return redirect(url_for("blog.index"))
 
+# DELETE POST ROUTE
 @blog_bp.route("/delete/<int:post_id>", methods=["GET"])
+@login_required
 def delete(post_id):
     deleting_post = Post.query.filter_by(id=post_id).first()
     db.session.delete(deleting_post)
