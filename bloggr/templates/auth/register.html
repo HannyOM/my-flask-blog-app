@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
 </head>
 
 <body>
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div class="container">
 
-        <form action="{{url_for('auth.register')}}" method="post" class="ui raised segment form" style="width: 50%;">
+        <form action="{{url_for('auth.register')}}" method="post" class="ui raised segment form">
             <h3 class="ui center aligned header">Register</h3>
 
             <div class="field">
@@ -25,7 +26,7 @@
                 <input type="password" name="password" placeholder="Password">
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="form-footer">
                 <button class="ui green button" type="submit">Register</button>
                 {% for message in get_flashed_messages() %}
                 <div class="flash grey label">{{ message }}</div>
