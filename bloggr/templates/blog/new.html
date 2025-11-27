@@ -13,12 +13,15 @@
         <br>
         <input name="post_title" type="text">
         <br>
-        <label for="post_content">Post</label>
+        <label for="post_content">Content</label>
         <br>
         <textarea name="post_content" id=""></textarea>
         <br>
         <button type="submit">Add</button>
         <a href="{{ url_for('blog.index') }}">Cancel</a>
+        {% for message in get_flashed_messages() %}
+        <div class="flash grey label">{{ message }}</div>
+        {% endfor %}
     </form>
 </body>
 

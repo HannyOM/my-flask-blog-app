@@ -14,12 +14,15 @@
         <br>
         <input name="new_post_title" type="text" value="{{ editing_post.title }}">
         <br>
-        <label for="new_post_content">Post</label>
+        <label for="dnew_post_content">Post</label>
         <br>
         <textarea name="new_post_content" id="">{{ editing_post.content }}</textarea>
         <br>
         <button type="submit">Save</button>
         <a href="{{ url_for('blog.index') }}">Cancel</a>
+        {% for message in get_flashed_messages() %}
+        <div class="flash grey label">{{ message }}</div>
+        {% endfor %}
     </form>
 </body>
 
