@@ -37,8 +37,9 @@ def create_app(test_config=None):
 
     db.init_app(app)            # Initializes SQLAlchemy with app.
     bcrypt.init_app(app)            # Initializes Brcypt with app.
-    login_manager.init_app(app)         # Initializes Login Manager with app.        
- 
+    login_manager.init_app(app)         # Initializes Login Manager with app. 
+    login_manager.login_view = "auth.login" # type: ignore
+
     from . import models          # Imports database models.
     with app.app_context():         # Creates database tables.
         db.create_all()
@@ -54,9 +55,5 @@ def create_app(test_config=None):
     from . import blog
     app.register_blueprint(blog.blog_bp)            # Registers blog blueprint.
     app.add_url_rule("/", endpoint="index")         # Associates the endpoint name "index" with the "/" url so that url_for("index") and url_for("blog.index") will work the same.
-
-    @app.route("/hello")
-    def hello():
-        return "Hello Hanny"
     
     return app
