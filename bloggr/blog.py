@@ -11,8 +11,7 @@ blog_bp = Blueprint('blog',         # Name of the blueprint.
 @blog_bp.route("/")
 def index():
     all_posts = Post.query.all()
-    user = current_user.username
-    return render_template("blog/index.html", all_posts=all_posts, user=user)
+    return render_template("blog/index.html", all_posts=all_posts, user=current_user)
 
 # NEW POST ROUTE
 @blog_bp.route("/new")
