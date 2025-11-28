@@ -1,16 +1,1 @@
-.container{
-   display: flex; 
-   justify-content: center; 
-   align-items: center; 
-   height: 100vh;
-}
-
-.form{
-    width: 50%;
-}
-
-.form-footer{
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-}
+/* ADD CUSTOM CSS HERE */

@@ -1,0 +1,30 @@
+{
+  "name": "my-flask-blog-app",
+  "version": "1.0.0",
+  "description": "A Flask blog app using Tailwind CSS",
+  "homepage": "https://github.com/HannyOM/my-flask-blog-app#readme",
+  "bugs": {
+    "url": "https://github.com/HannyOM/my-flask-blog-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HannyOM/my-flask-blog-app.git"
+  },
+  "license": "ISC",
+  "author": "Hanny Abubakar",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "tailwindcss -i ./src/input.css -o ./bloggr/static/css/main.css --watch",
+    "build": "tailwindcss -i ./src/input.css -o ./bloggr/static/css/main.css --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18"
+  }
+}
