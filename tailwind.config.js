@@ -1,10 +1,12 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./bloggr/templates/**/*.html",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
+import daisyui from 'daisyui';
+
+export const content = [
+  "./**/*.html",
+];
+export const theme = {
+  extend: {},
+};
+export const plugins = [
+  daisyui
+];
