@@ -1,7 +1,7 @@
 {
   "name": "my-flask-blog-app",
   "version": "1.0.0",
-  "description": "A Flask blog app using Tailwind CSS",
+  "description": "A Flask blog app using authentication and Tailwind CSS",
   "homepage": "https://github.com/HannyOM/my-flask-blog-app#readme",
   "bugs": {
     "url": "https://github.com/HannyOM/my-flask-blog-app/issues"
