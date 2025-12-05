@@ -41,8 +41,8 @@ def create_app(test_config=None):
     login_manager.login_view = "auth.login" # type: ignore
 
     from . import models          # Imports database models.
-    with app.app_context():         # Creates database tables.
-        db.create_all()
+    with app.app_context():         # Enters the Flask application context.
+        db.create_all()         # Creates database tables.
 
     from . import auth
     app.register_blueprint(auth.auth_bp)            # Registers auth blueprint.
