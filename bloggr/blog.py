@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Post
 from . import db
-from datetime import datetime
+from datetime import date
 from flask_login import login_required, current_user
 
 blog_bp = Blueprint('blog',         # Name of the blueprint.
@@ -37,7 +37,7 @@ def add():
             error_msg = flash(error)
             return redirect(url_for("blog.new", error_msg=error_msg))
         else:
-            new_content = Post(title=title, content=content,author_id=current_user.id, date=datetime.utcnow()) #type: ignore            # Updates the database with the user's input.
+            new_content = Post(title=title, content=content,author_id=current_user.id, date=date.today()) #type: ignore            # Updates the database with the user's input.
             db.session.add(new_content)
             db.session.commit()
     return redirect(url_for("blog.index"))
