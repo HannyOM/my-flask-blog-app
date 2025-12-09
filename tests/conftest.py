@@ -1,9 +1,11 @@
 # This file contains setup functions called "Fixtures" that each test will use.
 # Test files and Test functions begin with "test_".
-# Each test will create a new temporay database file and populate some data that will be used in the tests.
+# Each test will create a new temporary database file and populate some data that will be used in the tests.
 
 import pytest
-from bloggr import create_app, db as _db, bcrypt as _bcrypt
+from bloggr import create_app 
+from bloggr import db as _db            # Internal / Private database instance (for testing purposes only).
+from bloggr import bcrypt as _bcrypt
 
 # The app fixture will call the factory and pass "test_config" to configure the application and database for testing instead of using the local development configuration.
 @pytest.fixture
