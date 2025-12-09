@@ -21,7 +21,7 @@ def create_app(test_config=None):
                 instance_relative_config=True)          # Tells the app that the configuration files are relative to the instance folder. 
     app.config.from_mapping(            # Sets some default configurations.
         SECRET_KEY = "mydev",
-        SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(app.instance_path, "bloggr.sqlite")}",
+        SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(app.instance_path, "bloggr.db")}",
         SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
 
