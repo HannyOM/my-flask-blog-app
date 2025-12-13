@@ -6,6 +6,7 @@ import pytest
 from bloggr import create_app 
 from bloggr import db as _db            # Internal / Private database instance (for testing purposes only).
 from bloggr import bcrypt as _bcrypt
+from bloggr.models import User
 
 # The app fixture will call the factory and pass "test_config" to configure the application and database for testing instead of using the local development configuration.
 @pytest.fixture
@@ -33,3 +34,12 @@ def bcrypt():
 def client(app):            # Creates a test client (simulates HTTP requests to the Flask app).
     return app.test_client()
 
+@pytest.fixture
+def create_user(db, bcrypt):
+    username = "test_username"
+    password = "test_password"
+    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+    user = User(username=username, password=hashed_password) # type: ignore
+    db.session.add(user)
+    db.session.commit()
+    return username, password, user
