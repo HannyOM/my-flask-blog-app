@@ -2,30 +2,22 @@ from bloggr.models import User, Post
 from datetime import date
 
 
-def test_create_user(app, db, bcrypt):          # Ensures a user can be created and added to the database.
+def test_create_user(app, create_user, bcrypt):          # Ensures a user can be created and added to the database.
     with app.app_context():         
         # Create a user and add to the database.
-        username = "Hanny_username"
-        hashed_password = bcrypt.generate_password_hash("Hanny_password").decode("utf-8")
-        user = User(username=username, password=hashed_password) # type: ignore
-        db.session.add(user)
-        db.session.commit()
+        username, password, user = create_user
 
         # Retreive the user and create assertions on the details.
         existing_user = User.query.filter_by(username=username).first()
         assert existing_user is not None
         assert existing_user.id is not None
-        assert bcrypt.check_password_hash(existing_user.password, "Hanny_password") == True 
+        assert bcrypt.check_password_hash(existing_user.password, "test_password") == True 
 
 
-def test_create_post(app, db, bcrypt):         # Ensures a post can be created, added to a database and linked to a user.
+def test_create_post(app, db, create_user):         # Ensures a post can be created, added to a database and linked to a user.
     with app.app_context():
         # Create a user and add to the database.
-        username = "Abubakar_username"
-        hashed_password = bcrypt.generate_password_hash("Abubakar_password").decode("utf-8")
-        user = User(username=username, password=hashed_password) # type:ignore
-        db.session.add(user)
-        db.session.commit()
+        username, password, user = create_user
 
         # Create a post and add to the database.
         post = Post(
@@ -46,14 +38,10 @@ def test_create_post(app, db, bcrypt):         # Ensures a post can be created, 
         assert existing_post.date == date.today()
 
 
-def test_post_author_relationship(app, db, bcrypt):         # Ensures existing_post.author returns the User instance (backref works).
+def test_post_author_relationship(app, db, create_user):         # Ensures existing_post.author returns the User instance (backref works).
     with app.app_context():
         # Create a user and add to the database.
-        username = "Oshiozokhai_username"
-        hashed_password = bcrypt.generate_password_hash("Oshiozokhai_password").decode("utf-8")
-        user = User(username=username, password=hashed_password) # type:ignore
-        db.session.add(user)
-        db.session.commit()
+        username, password, user = create_user
 
         # Create a post and add to the database.
         post = Post(
@@ -71,14 +59,10 @@ def test_post_author_relationship(app, db, bcrypt):         # Ensures existing_p
         assert existing_post.author.username == username            # type: ignore
 
 
-def test_user_posts_relationship(app, db, bcrypt):         # Ensures existing_user.posts returns all posts authored by the user.
+def test_user_posts_relationship(app, db, create_user):         # Ensures existing_user.posts returns all posts authored by the user.
     with app.app_context():
         # Create a user and add to the database.
-        username = "Mustapha_username"
-        hashed_password = bcrypt.generate_password_hash("Mustapha_password").decode("utf-8")
-        user = User(username=username, password=hashed_password) # type:ignore
-        db.session.add(user)
-        db.session.commit()
+        username, password, user = create_user
 
         # Create multiple posts and add to the database.
         post_one = Post(
@@ -105,7 +89,7 @@ def test_user_posts_relationship(app, db, bcrypt):         # Ensures existing_us
         # Retrieve the user details and make assertions on the user_posts relationship.
         existing_user = User.query.filter_by(username=username).first()
         assert len(existing_user.posts) == 3            # type:ignore
-        assert [each_post.title for each_post in existing_user.posts] == ["My First Blog Post",         # type:ignore
+        assert [each_post.title for each_post in existing_user.posts] == ["My First Blog Post",         # type:ignore           # asserts that the titles of all the user's posts are what we defined.
                                                                  "My Second Blog Post",
                                                                  "My Third Blog Post"]
-        # assert that the titles of all the user's posts are what we defined. 
+
