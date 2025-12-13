@@ -11,7 +11,9 @@
 <body>
     {% if user.is_authenticated %}
     <h4>Welcome, {{user.username}}</h4>
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
     {% endif %}
+    <br>
     <a href="{{url_for('blog.new')}}">New Post</a>
 
     <p>
