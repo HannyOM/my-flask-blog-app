@@ -1,6 +1,8 @@
 import pytest
 from bloggr.models import User
 
+
+# REGISTER TESTS
 def test_register(client, app):
     test_register_page_status = client.get("/auth/register").status_code            # Simulates a GET request to get the "Register" page.  
     assert test_register_page_status == 200         # Asserts that the request was successful.
@@ -27,14 +29,12 @@ def test_register_validate_input(client, app, db, username, password, message):
     assert message in response.data
 
 
-def test_login(client, create_user):
+# LOGIN & LOGOUT TESTS
+def test_login(client, create_user, auth):
     test_login_page_status = client.get("/auth/login").status_code            
     assert test_login_page_status == 200
 
-    username, password, user = create_user
-    response = client.post("/auth/login", 
-                           data={"username" : username, 
-                                 "password" : password})
+    response = auth.login()
     assert response.headers["Location"] == "/" 
     
     with client.session_transaction() as sesh:          # Creates a context manager to access the Flask.
@@ -44,20 +44,18 @@ def test_login(client, create_user):
 
 @pytest.mark.parametrize(("username", "password", "message"), (("", "", b"Username is required."), 
                                                                ("test_username", "", b"Password is required."), 
-                                                               ("test_username", "wrong_test_password", b"Password is incorrect."),
-                                                               ("wrong_test_username", "test_password", b"Username does not exist.")))
-def test_login_validate_input(client, create_user, username, password, message):
-    _username, _password, _user = create_user         
-    response = client.post("/auth/login", data={"username" : username, 
-                                                "password" : password})
+                                                               ("test_username", "wrong_password", b"Password is incorrect."),
+                                                               ("wrong_username", "test_password", b"Username does not exist.")))
+def test_login_validate_input(auth, create_user, username, password, message):          # The "create_user" fixture must be added to ensure a user is created, since in the login route, the condition stated that for password to be checked, the user must first exist.
+    response = auth.login(username, password)        
     assert message in response.data
 
 
-def test_logout(client, create_user):
-    username, password, user = create_user
-    client.post("/auth/login", data={"username" : username, 
-                                     "password" : password})
-    client.get("/auth/logout")
+def test_logout(client, create_user, auth):
+    auth.login()
+    
+    response = auth.logout()
+    assert response.headers["Location"] == "/auth/login"
     with client.session_transaction() as sesh:
         user_id = sesh.get("_user_id")
         assert user_id is None
