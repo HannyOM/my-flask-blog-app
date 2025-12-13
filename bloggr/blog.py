@@ -14,7 +14,7 @@ def index():
     return render_template("blog/index.html", all_posts=all_posts, user=current_user)
 
 # NEW POST ROUTE
-@blog_bp.route("/new")
+@blog_bp.route("/new", methods=["GET"])
 @login_required
 def new():
     return render_template("blog/new.html")
