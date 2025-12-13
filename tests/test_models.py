@@ -2,6 +2,7 @@ from bloggr.models import User, Post
 from datetime import date
 
 
+# TABLE CREATION TESTS 
 def test_create_user(app, create_user, bcrypt):          # Ensures a user can be created and added to the database.
     with app.app_context():         
         # Create a user and add to the database.
@@ -38,6 +39,7 @@ def test_create_post(app, db, create_user):         # Ensures a post can be crea
         assert existing_post.date == date.today()
 
 
+# RELATIONSHIP TESTS 
 def test_post_author_relationship(app, db, create_user):         # Ensures existing_post.author returns the User instance (backref works).
     with app.app_context():
         # Create a user and add to the database.
