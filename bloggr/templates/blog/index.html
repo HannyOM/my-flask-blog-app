@@ -23,6 +23,8 @@
         <br>
         {{ each_post.content }}
         <br>
+        Author: {{ each_post.author.username }}
+        <br>
         {{ each_post.date }}
         <br>
         <a href="/edit/{{each_post.id}}">Edit</a>
