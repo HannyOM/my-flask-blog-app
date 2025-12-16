@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from .models import Post
 from . import db
 from datetime import date
@@ -46,7 +46,9 @@ def add():
 @blog_bp.route("/edit/<int:post_id>", methods=["GET", "POST"])
 @login_required
 def edit(post_id):
-    editing_post = Post.query.filter_by(id=post_id).first()
+    editing_post = db.get_or_404(Post, post_id)
+    if editing_post.author_id != current_user.id: # type: ignore
+        abort(403)
     return render_template("blog/edit.html", editing_post=editing_post)
 
 # SAVE POST ROUTE
@@ -77,7 +79,10 @@ def save(post_id):
 @blog_bp.route("/delete/<int:post_id>", methods=["GET"])
 @login_required
 def delete(post_id):
-    deleting_post = Post.query.filter_by(id=post_id).first()
-    db.session.delete(deleting_post)
-    db.session.commit()
+    deleting_post = db.get_or_404(Post, post_id)
+    if deleting_post.author_id != current_user.id: # type: ignore
+        abort(403)
+    else:    
+        db.session.delete(deleting_post)
+        db.session.commit()
     return redirect(url_for("blog.index"))
