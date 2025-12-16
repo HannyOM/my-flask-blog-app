@@ -55,3 +55,51 @@ def test_exists_required(client, create_user, auth, path):
     auth.login()
     response = client.get(path)
     assert response.status_code == 404          # Asserts that if the path does not exist, a 404 status code is returned.
+
+
+def test_add_post(client, create_user, auth, app):
+    auth.login()
+    response = client.get("/new")
+    assert response.status_code == 200
+
+    client.post("/add", data={"post_title" : "The Post title",
+                              "post_content" : "The Post content"})
+    with app.app_context():
+        count = Post.query.count()
+        assert count == 1
+
+
+def test_edit_post(client, create_user, auth, app, db):
+    auth.login()
+    client.post("/add", data={"post_title" : "The post title",
+                              "post_content" : "The post content"})
+    response = client.get("/edit/1")
+    assert response.status_code == 200
+
+    client.post("/save/1", data={"new_post_title" : "The new post title",
+                                 "new_post_content" : "The new post content"})
+    with app.app_context():
+        edited_post = db.get_or_404(Post, 1)
+        assert edited_post.title == "The new post title"
+
+
+@pytest.mark.parametrize(("title", "content", "message"),(("", "", b"Title is required."),
+                                                          ("Test post title", "", b"Content is required.")))
+def test_add_post_validate(client, create_user, auth, title, content, message):
+    auth.login()
+    response = client.post("/add", data={"post_title" : title,
+                                         "post_content" : content})
+    assert message in response.data
+    print(response)
+
+
+@pytest.mark.parametrize(("new_title", "new_content", "message"),(("", "", b"Title is required."),
+                                                          ("New test post title", "", b"Content is required.")))
+def test_edit_post_validate(client, create_user, auth, new_title, new_content, message):
+    auth.login()
+    client.post("/add", data={"post_title" : "The post title",
+                              "post_content" : "The post content"})
+    response = client.post("/save/1", data={"new_post_title" : new_title,
+                                            "new_post_content" : new_content})
+    assert message in response.data
+    print(response)
