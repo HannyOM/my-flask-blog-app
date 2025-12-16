@@ -31,11 +31,11 @@ def add():
         if not title:           # Ensures the user has inputted something.
             error = "Title is required."
         elif not content:
-            error = "Content is reqired."
+            error = "Content is required."
         
         if error is not None:
             error_msg = flash(error)
-            return redirect(url_for("blog.new", error_msg=error_msg))
+            return render_template("blog/new.html", error_msg=error_msg)
         else:
             new_content = Post(title=title, content=content,author_id=current_user.id, date=date.today()) #type: ignore            # Updates the database with the user's input.
             db.session.add(new_content)
@@ -68,7 +68,7 @@ def save(post_id):
 
         if error is not None:
             error_msg = flash(error)
-            return redirect(url_for("blog.edit", post_id=editing_post.id, error_msg=error_msg)) # type: ignore
+            return render_template("blog/edit.html", editing_post=editing_post, error_msg=error_msg) # type: ignore
         else:
             editing_post.title = new_title # type: ignore
             editing_post.content = new_content # type: ignore
