@@ -13,7 +13,7 @@ from bloggr.models import User
 def app():
     app = create_app({
         "TESTING": True,            # Enables testing mode.
-        "SQL_DATABASE_URI": "sqlite:///:memory:"            # Uses an in-memory SQLite databse (fast, isolated and no clean up needed).
+        "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:"            # Uses an in-memory SQLite databse (fast, isolated and no clean up needed).
     })
 
     with app.app_context():         # Enters the Flask application context.
@@ -43,6 +43,16 @@ def create_user(db, bcrypt):
     db.session.add(user)
     db.session.commit()
     return username, password, user
+
+@pytest.fixture
+def create_user2(db, bcrypt):
+    username2 = "test_username2"
+    password2 = "test_password2"
+    hashed_password2 = bcrypt.generate_password_hash(password2).decode("utf-8")
+    user2 = User(username=username2, password=hashed_password2) # type: ignore
+    db.session.add(user2)
+    db.session.commit()
+    return username2, password2, user2
 
 class AuthActions(object):
     def __init__(self, client):
