@@ -103,3 +103,17 @@ def test_edit_post_validate(client, create_user, auth, new_title, new_content, m
                                             "new_post_content" : new_content})
     assert message in response.data
     print(response)
+
+
+def test_delete(client, create_user, auth, app):
+    auth.login()
+    client.post("/add", data={"post_title" : "The post title",
+                              "post_content" : "The post content"})
+    with app.app_context():
+        count = Post.query.count()
+        assert count == 1
+    
+    client.get("/delete/1")
+    with app.app_context():
+        count = Post.query.count()
+        assert count == 0
