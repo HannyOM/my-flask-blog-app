@@ -1,12 +1,12 @@
 import pytest
 from bloggr.models import Post
+from datetime import date
 
 
 def test_index(client, create_user, auth):
     response = client.get("/")
     assert b"New Post" in response.data
 
-    # create_user # type: ignore
     auth.login()
     response = client.get("/")
     print(response.data)
@@ -16,10 +16,9 @@ def test_index(client, create_user, auth):
 
 @pytest.mark.parametrize(("path", "method"), (("/new", "GET"), 
                                               ("/add", "POST"), 
-                                              ("/edit/1", "GET"), 
-                                              ("/save/1", "POST"), 
-                                              ("/delete/1", "GET")))
-
+                                              ("/edit/2", "GET"), 
+                                              ("/save/2", "POST"), 
+                                              ("/delete/2", "GET")))
 def test_login_required(client, path, method):
     if method == "GET":
         response = client.get(path)
@@ -28,3 +27,31 @@ def test_login_required(client, path, method):
     assert response.headers["Location"].startswith("/auth/login")
 
 
+def test_author_required(app, db, create_user, create_user2, auth, client):         # Tests that the author_id is required to determine who has permission to edit or delete a post. 
+    with app.app_context():
+        username, password, user = create_user          # Creates User1.
+        username2, password2, user2 = create_user2          # Creates User2.
+
+        post = Post(            # Creates a post from User1
+                title = "User1 Blog Post", # type:ignore
+                content = "This is actually his first blog post.", # type:ignore
+                author_id = user.id, # type:ignore
+                date = date.today() # type:ignore
+            )
+        db.session.add(post)
+        db.session.commit()
+        retrieved_post = Post.query.filter_by(id=1).first()
+        retrieved_post.author_id = user2.id # type: ignore             # Changes the author_id of User1's post(User1's id) to User2's id.
+        db.session.commit()
+
+    auth.login()            # Logs in User1
+    assert client.get("/edit/1").status_code == 403         # Asserts that if User1 tries to edit the post(whose author_id was reassigned User2's id), User1 will be forbidden.
+    assert client.get("/delete/1").status_code == 403           # Asserts that if User1 tries to delete the post(whose author_id was reassigned User2's id), User1 will be forbidden.
+
+
+@pytest.mark.parametrize(("path"), (("/edit/2"),            # Tests that a path must exist to be accessed.
+                                    ("/delete/2")))
+def test_exists_required(client, create_user, auth, path):          
+    auth.login()
+    response = client.get(path)
+    assert response.status_code == 404          # Asserts that if the path does not exist, a 404 status code is returned.
