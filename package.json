@@ -18,9 +18,8 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "tailwindcss -i ./bloggr/static/src/input.css -o ./bloggr/static/css/main.css --watch",
-    "build": "tailwindcss -i ./bloggr/staticw/src/input.css -o ./bloggr/static/css/main.css --minify",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npx tailwindcss -i ./bloggr/static/src/input.css -o ./bloggr/static/css/main.css --watch",
+    "build": "npx tailwindcss -i ./bloggr/static/src/input.css -o ./bloggr/static/css/main.css --minify"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.22",
