@@ -23,9 +23,9 @@
             </div>
 
             <div class="form-footer">
-                <button class="ui blue button" type="submit">Login</button>
+                <button class="btn btn-primary" type="submit">Login</button>
                 {% for message in get_flashed_messages() %}
-                <div class="flash grey label">{{ message }}</div>
+                <div>{{ message }}</div>
                 {% endfor %}
                 <p>Not registered? <a href="{{url_for('auth.register')}}">Register</a></p>
             </div>
