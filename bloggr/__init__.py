@@ -10,10 +10,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from dotenv import load_dotenv
 
 
-load_dotenv()
 db = SQLAlchemy()         # Initializes SQLAlchemy without app.
 bcrypt = Bcrypt()           # Initializes Brcypt without app.
 login_manager = LoginManager()          # Initializes Login Manager without app.
@@ -22,8 +20,8 @@ def create_app(test_config=None):
     app = Flask(__name__,           # Tells the app the name of the current Python module where it is located.
                 instance_relative_config=True)          # Tells the app that the configuration files are relative to the instance folder. 
     app.config.from_mapping(            # Sets some default configurations.
-        SECRET_KEY = os.environ.get("SECRET_KEY", "dev"),           # Uses Secret key assigned in instance/config.py (if available), otherwise uses the string "dev".
-        SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", f"sqlite:///{os.path.join(app.instance_path, "bloggr.db")}"),          # Allows switching database later to PostgreSQL/MySQL, otherwise uses "sqlite:///bloggr.db".
+        SECRET_KEY = "dev",           
+        SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(app.instance_path, "bloggr.db")}",
         SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
 
