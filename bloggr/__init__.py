@@ -10,9 +10,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask_migrate import Migrate
 
 
 db = SQLAlchemy()         # Initializes SQLAlchemy without app.
+migrate = Migrate()
 bcrypt = Bcrypt()           # Initializes Brcypt without app.
 login_manager = LoginManager()          # Initializes Login Manager without app.
 
@@ -36,6 +38,7 @@ def create_app(test_config=None):
         pass
 
     db.init_app(app)            # Initializes SQLAlchemy with app.
+    migrate.init_app(app, db)
     bcrypt.init_app(app)            # Initializes Brcypt with app.
     login_manager.init_app(app)         # Initializes Login Manager with app. 
     login_manager.login_view = "auth.login" # type: ignore
