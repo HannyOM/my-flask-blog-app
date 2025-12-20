@@ -1,7 +1,7 @@
 alembic==1.17.2
 bcrypt==5.0.0
 blinker==1.9.0
--e git+https://github.com/HannyOM/my-flask-blog-app.git@da7d5829a8c9a92a134c75e29d087a11474aa720#egg=bloggr
+-e git+https://github.com/HannyOM/my-flask-blog-app.git@5f16afe9563ed573df2affc15e9b83e49fca353b#egg=bloggr
 click==8.3.1
 colorama==0.4.6
 coverage==7.12.0
