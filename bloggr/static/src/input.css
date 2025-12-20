@@ -1,2 +1,17 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.some-space-above{
+    margin-top: 1rem;
+}
+
+.auth-box{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fieldset-legend-extra{
+    font-size: 0.95rem;
+}

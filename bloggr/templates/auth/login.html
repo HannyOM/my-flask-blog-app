@@ -5,31 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
 
 <body>
-    <div class="container">
-        <form action="{{url_for('auth.login')}}" method="post">
-            <h3>Login</h3>
+    <div class="auth-box">
+        <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 shadow-xl">
+            <legend class="fieldset-legend fieldset-legend-extra">Login</legend>
 
-            <div>
-                <label>Username</label>
-                <input type="text" name="username" placeholder="Username">
-            </div>
+            <form action="{{url_for('auth.login')}}" method="post">
+                <div class="some-space-above">
+                    <label class="label">Username</label>
+                    <input type="text" class="input" name="username" placeholder="Username">
+                </div>
 
-            <div class="field">
-                <label>Password</label>
-                <input type="password" name="password" placeholder="Password">
-            </div>
+                <div class="some-space-above">
+                    <label class="label">Password</label>
+                    <input type="password" class="input" name="password" placeholder="Password">
+                </div>
 
-            <div class="form-footer">
-                <button class="btn btn-primary" type="submit">Login</button>
+                <button class="btn btn-block btn-neutral mt-4" type="submit">Login</button>
                 {% for message in get_flashed_messages() %}
                 <div>{{ message }}</div>
                 {% endfor %}
-                <p>Not registered? <a href="{{url_for('auth.register')}}">Register</a></p>
-            </div>
-        </form>
+                <p class="some-space-above">Not registered? <a href="{{url_for('auth.register')}}"
+                        class="link">Register</a></p>
+            </form>
+        </fieldset>
     </div>
 </body>
 
