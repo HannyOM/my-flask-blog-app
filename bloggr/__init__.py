@@ -22,13 +22,11 @@ def create_app(test_config=None):
     app = Flask(__name__,           # Tells the app the name of the current Python module where it is located.
                 instance_relative_config=True)          # Tells the app that the configuration files are relative to the instance folder. 
     app.config.from_mapping(            # Sets some default configurations.
-        SECRET_KEY = "dev",           
-        SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(app.instance_path, "bloggr.db")}",
         SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
 
     if test_config is None:
-        app.config.from_pyfile("config.py", silent=True)            # Loads the instance configurations, if it exists, when not in testing.
+        app.config.from_pyfile("config.py", silent=False)            # Loads the instance configurations, if it exists, when not in testing.
     else:
         app.config.from_mapping(test_config)            # Loads the test configurations if passed in, when in testing.
 
