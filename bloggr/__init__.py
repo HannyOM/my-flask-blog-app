@@ -10,9 +10,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask_migrate import Migrate
 
 
 db = SQLAlchemy()         # Initializes SQLAlchemy without app.
+migrate = Migrate()
 bcrypt = Bcrypt()           # Initializes Brcypt without app.
 login_manager = LoginManager()          # Initializes Login Manager without app.
 
@@ -20,8 +22,6 @@ def create_app(test_config=None):
     app = Flask(__name__,           # Tells the app the name of the current Python module where it is located.
                 instance_relative_config=True)          # Tells the app that the configuration files are relative to the instance folder. 
     app.config.from_mapping(            # Sets some default configurations.
-        SECRET_KEY = "dev",           
-        SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(app.instance_path, "bloggr.db")}",
         SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
 
@@ -36,13 +36,10 @@ def create_app(test_config=None):
         pass
 
     db.init_app(app)            # Initializes SQLAlchemy with app.
+    migrate.init_app(app, db)
     bcrypt.init_app(app)            # Initializes Brcypt with app.
     login_manager.init_app(app)         # Initializes Login Manager with app. 
     login_manager.login_view = "auth.login" # type: ignore
-
-    from . import models          # Imports database models.
-    with app.app_context():         # Enters the Flask application context.
-        db.create_all()         # Creates database tables.
 
     from . import auth
     app.register_blueprint(auth.auth_bp)            # Registers auth blueprint.
