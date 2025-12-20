@@ -22,6 +22,8 @@ def create_app(test_config=None):
     app = Flask(__name__,           # Tells the app the name of the current Python module where it is located.
                 instance_relative_config=True)          # Tells the app that the configuration files are relative to the instance folder. 
     app.config.from_mapping(            # Sets some default configurations.
+        SECRET_KEY = "dev",           
+        SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(app.instance_path, "bloggr.db")}",
         SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
 
@@ -44,7 +46,7 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.auth_bp)            # Registers auth blueprint.
 
-    from .models import User
+    from .models import User, Post
     @login_manager.user_loader          # Provides a user_loader callback, which reloads the user object from the user ID stored in the session.
     def load_user(user_id):
         return User.query.get(user_id)
