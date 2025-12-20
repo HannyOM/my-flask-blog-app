@@ -3,7 +3,7 @@ import daisyui from "daisyui"
 
 export default {      
   content: [      // Tells Tailwind which files to scan for class names.
-    "./**/*.html",
+    "./**/*.{js,css,html}",
   ],
   theme: {      // Defines your Tailwind design system (colors, spacing, fonts, breakpoints).
     extend: {},     // Lets you add new values instead of overriding existing ones.
@@ -11,4 +11,7 @@ export default {
   plugins: [      // Lets you register Tailwind plugins.
     daisyui,
   ],
+  daisyui: {
+    themes: ["light", "dark"], // 👈 REQUIRED
+  },
 }
