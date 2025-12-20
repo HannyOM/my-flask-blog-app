@@ -41,6 +41,8 @@ def create_app(test_config=None):
     login_manager.init_app(app)         # Initializes Login Manager with app. 
     login_manager.login_view = "auth.login" # type: ignore
 
+    from . import models          # Imports database models.
+    
     from . import auth
     app.register_blueprint(auth.auth_bp)            # Registers auth blueprint.
 
