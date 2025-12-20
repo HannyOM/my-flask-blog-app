@@ -21,19 +21,13 @@ login_manager = LoginManager()          # Initializes Login Manager without app.
 def create_app(test_config=None):
     app = Flask(__name__,           # Tells the app the name of the current Python module where it is located.
                 instance_relative_config=True)          # Tells the app that the configuration files are relative to the instance folder. 
-    app.config.from_mapping(            # Sets some default configurations.
-        SQLALCHEMY_TRACK_MODIFICATIONS = False
-    )
-
-    if test_config is None:
-        app.config.from_pyfile("config.py", silent=True)            # Loads the instance configurations, if it exists, when not in testing.
-    else:
-        app.config.from_mapping(test_config)            # Loads the test configurations if passed in, when in testing.
-
-    try:
-        os.makedirs(app.instance_path)          # Attempts to create an instance path if one doesn't already exist.
-    except OSError:
-        pass
+    
+    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+    if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)            # Initializes SQLAlchemy with app.
     migrate.init_app(app, db)
