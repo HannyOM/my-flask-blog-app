@@ -90,8 +90,8 @@
     "tailwindcss": "^4.1.18"
   },
   "scripts": {
-    "dev:css": "npx tailwindcss -i ./bloggr/static/src/input.css -o ./bloggr/static/css/output.css --watch",
-    "build:css": "npx tailwindcss -i ./bloggr/static/src/input.css -o ./bloggr/static/css/output.css --minify",
+    "dev:css": "npx tailwindcss -i ./bloggr/static/src/input.css -o ./bloggr/static/css/main.css --watch",
+    "build:css": "npx tailwindcss -i ./bloggr/static/src/input.css -o ./bloggr/static/css/main.css --minify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
