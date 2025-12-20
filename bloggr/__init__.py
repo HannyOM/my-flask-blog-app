@@ -26,7 +26,7 @@ def create_app(test_config=None):
     )
 
     if test_config is None:
-        app.config.from_pyfile("config.py", silent=False)            # Loads the instance configurations, if it exists, when not in testing.
+        app.config.from_pyfile("config.py", silent=True)            # Loads the instance configurations, if it exists, when not in testing.
     else:
         app.config.from_mapping(test_config)            # Loads the test configurations if passed in, when in testing.
 
