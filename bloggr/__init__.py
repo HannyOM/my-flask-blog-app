@@ -23,7 +23,7 @@ def create_app(test_config=None):
                 instance_relative_config=True)          # Tells the app that the configuration files are relative to the instance folder. 
     
     app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
-    DATABASE_URL = os.environ.get("DATABASE_PUBLIC_URL")
+    DATABASE_URL = os.environ.get("DATABASE_URL")
     if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
