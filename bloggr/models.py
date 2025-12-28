@@ -13,7 +13,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)            # Initializes a "Post" table with five columns.
     title = db.Column(db.String, nullable=False)
     content = db.Column(db.String, nullable=False)
-    author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False) # "ForeignKey" points to the "id" column in the "User" table.
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)         # "ForeignKey" points to the "id" column in the "User" table.
     date = db.Column(db.Date)
 
 
